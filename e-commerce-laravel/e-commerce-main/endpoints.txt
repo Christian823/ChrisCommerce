@@ -1,0 +1,250 @@
+Endpoints
+
+Método	    Endpoint	        Descripción	            Autenticación
+POST	    /api/register	    Registrar usuario	        No
+POST	    /api/login	        Iniciar sesión	            No
+GET	        /api/products	    Listar productos	        No
+GET	        /api/products/{id}	Consultar producto	        No
+POST	    /api/products	    Crear producto	        Bearer Token
+PUT	        /api/products/{id}	Actualizar producto	    Bearer Token
+DELETE	    /api/products/{id}	Eliminar producto	    Bearer Token
+POST	    /api/orders	        Crear orden de compra	Bearer Token
+
+
+
+/////////Autenticación
+
+Registrar usuario
+
+Método          POST
+
+Ruta            /api/register
+
+Autenticación   No requerida
+
+Crea un nuevo usuario en el sistema.
+
+Body de ejemplo
+
+{
+  "name": "Christian Chacon",
+  "email": "usuario@gmail.com",
+  "password": "password123"
+}
+
+Respuesta de ejemplo
+
+{
+  "message": "Usuario registrado correctamente"
+}
+
+Código esperado: 201 Created
+
+
+/////////Iniciar sesión
+
+Método              POST
+
+Ruta                /api/login
+
+Autenticación       No requerida
+
+Autentica un usuario existente y devuelve un token que se utiliza en las rutas protegidas.
+
+Body de ejemplo
+
+{
+  "email": "usuario@gmail.com",
+  "password": "password123"
+}
+
+Respuesta de ejemplo
+
+{
+  "message": "User loged successfully",
+  "user": {
+    "id": 1,
+    "name": "Christian Chacon",
+    "email": "usuario@gmail.com"
+  },
+  "token": "1|TOKEN_GENERADO",
+  "type_token": "Bearer"
+}
+
+Código esperado: 200 OK
+
+
+
+
+/////////Productos
+
+/////////Listar productos
+
+Método              GET
+
+Ruta                /api/products
+
+Autenticación       Pública
+
+Devuelve todos los productos almacenados en la tabla products.
+
+Respuesta de ejemplo
+
+[
+  {
+    "id_producto": 1,
+    "Nombre_producto": "Naranjas",
+    "Descripcion": "Las mejores naranjas del mundo",
+    "Precio_de_venta": "1.25"
+  }
+]
+
+Código esperado: 200 OK
+
+
+/////////Obtener producto por ID
+
+Método              GET
+
+Ruta                /api/products/{id}
+
+Autenticación       Pública
+
+Devuelve un producto específico por su id_producto.
+
+Respuesta de ejemplo
+
+{
+  "id_producto": 1,
+  "Nombre_producto": "Naranjas",
+  "Descripcion": "Las mejores naranjas del mundo",
+  "Precio_de_venta": "1.25"
+}
+
+Código esperado: 200 OK
+
+
+/////////Crear producto
+
+Método              POST
+
+Ruta                /api/products
+
+Autenticación       Bearer Token
+
+Crea un nuevo producto. Esta ruta está protegida con auth:sanctum.
+
+Body de ejemplo
+
+{
+  "Nombre_producto": "Manzanas",
+  "Descripcion": "Manzanas rojas",
+  "Precio_de_venta": 2.50
+}
+
+Respuesta de ejemplo
+
+{
+  "message": "Producto creado",
+  "product": {
+    "id_producto": 2,
+    "Nombre_producto": "Manzanas",
+    "Descripcion": "Manzanas rojas",
+    "Precio_de_venta": "2.50"
+  }
+}
+
+Código esperado: 201 Created
+
+
+/////////Actualizar producto
+
+Método              PUT
+
+Ruta                /api/products/{id}
+
+Autenticación       Bearer Token
+
+Actualiza los datos completos de un producto existente.
+
+Body de ejemplo
+
+{
+  "Nombre_producto": "Naranjas Premium",
+  "Descripcion": "Naranjas seleccionadas",
+  "Precio_de_venta": 1.75
+}
+
+Respuesta de ejemplo
+
+{
+  "message": "Producto actualizado correctamente",
+  "product": {
+    "id_producto": 1,
+    "Nombre_producto": "Naranjas Premium",
+    "Descripcion": "Naranjas seleccionadas",
+    "Precio_de_venta": "1.75"
+  }
+}
+
+Código esperado: 200 OK
+
+
+
+
+/////////Eliminar producto
+
+Método              DELETE
+
+Ruta                /api/products/{id}
+
+Autenticación       Bearer Token
+
+Elimina un producto por su id_producto.
+
+Respuesta de ejemplo
+
+{
+  "message": "Producto eliminado correctamente"
+}
+
+Código esperado: 200 OK
+
+
+
+/////////Órdenes
+
+/////////Crear orden de compra
+
+Método                  POST
+
+Ruta                    /api/orders
+
+Autenticación           Bearer Token
+
+Crea una orden asociada automáticamente al usuario autenticado. Los productos enviados se guardan en order_items y el precio se obtiene desde la tabla products.
+
+Body de ejemplo
+
+{
+  "estado": "pendiente",
+  "productos": [
+    {
+      "id_producto": 1,
+      "cantidad": 2
+    }
+  ]
+}
+
+Respuesta de ejemplo
+
+{
+  "message": "Orden creada correctamente",
+  "order": {
+    "id_cliente": 1,
+    "estado": "pendiente",
+    "id_orden": 2
+  }
+}
+
+Código esperado: 201 Created
